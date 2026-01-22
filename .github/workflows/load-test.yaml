@@ -32,11 +32,11 @@ on:
 
 env:
   KIND_VERSION: v0.31.0
-  LOAD_TEST_USERS: ${{ github.event.inputs.users || '20' }}
+  LOAD_TEST_USERS: ${{ github.event.inputs.users || '30' }}
   LOAD_TEST_SPAWN_RATE: ${{ github.event.inputs.spawn_rate || '5' }}
-  LOAD_TEST_DURATION: ${{ github.event.inputs.duration || '180' }}
-  LOAD_TEST_THRESHOLD_P95: ${{ github.event.inputs.threshold_p95 || '500' }}
-  LOAD_TEST_THRESHOLD_P99: ${{ github.event.inputs.threshold_p99 || '1000' }}
+  LOAD_TEST_DURATION: ${{ github.event.inputs.duration || '120' }}
+  LOAD_TEST_THRESHOLD_P95: ${{ github.event.inputs.threshold_p95 || '400' }}
+  LOAD_TEST_THRESHOLD_P99: ${{ github.event.inputs.threshold_p99 || '800' }}
   LOAD_TEST_THRESHOLD_ERROR_RATE: ${{ github.event.inputs.threshold_error_rate || '5' }}
 
 jobs:
