@@ -1,5 +1,6 @@
 # GoodNotes Challenge
 [Github](https://github.com/sysadmin-exe/goodnotes-challenge)
+Duration: 4hrs, 32 mins
 A complete Kubernetes infrastructure solution featuring a multi-node KinD cluster, HTTP echo services, monitoring stack, and automated load testing with CI integration.
 
 ## Architecture Overview
