@@ -61,13 +61,13 @@ jobs:
 
       - name: Install KinD
         run: |
-          curl -Lo /usr/local/bin/kind https://kind.sigs.k8s.io/dl/${{ env.KIND_VERSION }}/kind-linux-amd64
-          chmod +x /usr/local/bin/kind
+          sudo curl -Lo /usr/local/bin/kind https://kind.sigs.k8s.io/dl/${{ env.KIND_VERSION }}/kind-linux-amd64
+          sudo chmod +x /usr/local/bin/kind
 
       - name: Install kubectl
         run: |
-          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          chmod +x kubectl
+          sudo curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          sudo chmod +x kubectl
           sudo mv kubectl /usr/local/bin/kubectl
 
       - name: Install Helm
