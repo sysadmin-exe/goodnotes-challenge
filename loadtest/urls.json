@@ -1,0 +1,12 @@
+[
+  {
+    "name": "foo",
+    "url": "http://foo.localhost",
+    "expected": "foo"
+  },
+  {
+    "name": "bar",
+    "url": "http://bar.localhost",
+    "expected": "bar"
+  }
+]

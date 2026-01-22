@@ -1,0 +1,49 @@
+{
+  "summary": {
+    "total_requests": 11608,
+    "total_failures": 0,
+    "failure_rate": 0.0,
+    "requests_per_second": 64.47403015897616,
+    "duration_seconds": 180.04148292541504
+  },
+  "response_time": {
+    "avg": 4.339355859148868,
+    "min": 0.7837080000001606,
+    "max": 98.74712499999916,
+    "median": 4,
+    "p90": 7,
+    "p95": 8,
+    "p99": 11
+  },
+  "thresholds": {
+    "p95_under_500ms": {
+      "value": 8,
+      "ok": true
+    },
+    "p99_under_1000ms": {
+      "value": 11,
+      "ok": true
+    },
+    "error_rate_under_5.0pct": {
+      "value": 0.0,
+      "ok": true
+    }
+  },
+  "endpoints": [
+    {
+      "name": "/bar",
+      "requests": 5830,
+      "failures": 0,
+      "avg_response_time": 4.308148408061713,
+      "p95_response_time": 8
+    },
+    {
+      "name": "/foo",
+      "requests": 5778,
+      "failures": 0,
+      "avg_response_time": 4.3708441664936,
+      "p95_response_time": 8
+    }
+  ],
+  "timestamp": "2026-01-22T12:00:20.685797"
+}
