@@ -254,6 +254,10 @@ spec:
     protocol: TCP
     targetPort: https
     appProtocol: https
+  - name: metrics
+    port: 10254
+    protocol: TCP
+    targetPort: metrics
   selector:
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: ingress-nginx
@@ -324,6 +328,8 @@ spec:
         - --validating-webhook-key=/usr/local/certificates/key
         - --watch-ingress-without-class=true
         - --publish-status-address=localhost
+        - --enable-metrics=true
+        - --metrics-per-host=true
         securityContext:
           capabilities:
             drop:
@@ -374,6 +380,9 @@ spec:
           protocol: TCP
         - name: webhook
           containerPort: 8443
+          protocol: TCP
+        - name: metrics
+          containerPort: 10254
           protocol: TCP
         volumeMounts:
         - name: webhook-cert

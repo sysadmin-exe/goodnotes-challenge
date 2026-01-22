@@ -2,11 +2,13 @@
   {
     "name": "foo",
     "url": "http://foo.localhost",
-    "expected": "foo"
+    "expected": "foo",
+    "namespace": "default"
   },
   {
     "name": "bar",
     "url": "http://bar.localhost",
-    "expected": "bar"
+    "expected": "bar",
+    "namespace": "default"
   }
 ]

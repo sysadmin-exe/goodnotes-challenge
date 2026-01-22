@@ -99,6 +99,38 @@ jobs:
             --for=condition=available deployment \
             --all --timeout=120s
 
+      - name: Deploy Monitoring Stack
+        run: |
+          # Add Helm repo
+          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+          helm repo update
+          
+          # Create monitoring namespace
+          kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
+          
+          # Install kube-prometheus-stack with minimal config for CI
+          helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
+            --namespace monitoring \
+            --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false \
+            --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false \
+            --set grafana.enabled=false \
+            --set alertmanager.enabled=false \
+            --set kubeStateMetrics.enabled=true \
+            --set nodeExporter.enabled=true \
+            --wait \
+            --timeout 5m
+          
+          # Apply ServiceMonitor for ingress controller
+          kubectl apply -f monitoring/ingress-servicemonitor.yaml
+          
+          # Wait for Prometheus to be ready
+          kubectl wait --namespace monitoring \
+            --for=condition=ready pod \
+            --selector=app.kubernetes.io/name=prometheus \
+            --timeout=120s
+          
+          echo "==> Prometheus deployed successfully"
+
       - name: Setup /etc/hosts
         run: |
           echo "127.0.0.1 foo.localhost bar.localhost" | sudo tee -a /etc/hosts
@@ -106,6 +138,11 @@ jobs:
       - name: Port forward ingress controller
         run: |
           kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 80:80 &
+          sleep 5
+
+      - name: Port forward Prometheus
+        run: |
+          kubectl port-forward -n monitoring svc/kube-prometheus-stack-prometheus 9090:9090 &
           sleep 5
 
       - name: Verify services are accessible
@@ -130,6 +167,41 @@ jobs:
             --output-dir results
         continue-on-error: true
 
+      - name: Wait for metrics to be scraped
+        run: |
+          echo "==> Waiting 30s for Prometheus to scrape metrics..."
+          sleep 30
+
+      - name: Collect resource metrics from Prometheus
+        run: |
+          cd loadtest
+          # Duration = load test duration (in minutes) + 2 extra minutes
+          METRICS_DURATION=$(( (${{ env.LOAD_TEST_DURATION }} / 60) + 2 ))
+          python collect_metrics.py \
+            --prometheus-url http://prometheus.localhost \
+            --urls urls.json \
+            --duration $METRICS_DURATION \
+            --output-dir results \
+            --output-format both
+        continue-on-error: true
+
+      - name: Combine reports
+        run: |
+          cd loadtest/results
+          
+          # Combine load test and resource metrics into final report
+          if [ -f summary.md ] && [ -f resource_metrics.md ]; then
+            cat summary.md > combined_report.md
+            echo "" >> combined_report.md
+            cat resource_metrics.md >> combined_report.md
+            echo "==> Combined report created"
+          elif [ -f summary.md ]; then
+            cp summary.md combined_report.md
+            echo "==> Using load test report only (no resource metrics)"
+          else
+            echo "## ⚠️ Load Test Results\n\nNo reports generated." > combined_report.md
+          fi
+
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
@@ -145,7 +217,14 @@ jobs:
             let comment = '';
             
             try {
-              comment = fs.readFileSync('loadtest/results/summary.md', 'utf8');
+              // Try combined report first, fall back to summary
+              if (fs.existsSync('loadtest/results/combined_report.md')) {
+                comment = fs.readFileSync('loadtest/results/combined_report.md', 'utf8');
+              } else if (fs.existsSync('loadtest/results/summary.md')) {
+                comment = fs.readFileSync('loadtest/results/summary.md', 'utf8');
+              } else {
+                throw new Error('No report files found');
+              }
             } catch (error) {
               comment = '## ⚠️ Load Test Results\n\nFailed to generate load test summary. Check the workflow logs for details.';
             }

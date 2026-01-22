@@ -153,3 +153,51 @@ Results are saved to the `results/` directory:
 ## CI Integration
 
 The load test runs automatically on Pull Requests via GitHub Actions. Results are posted as a comment on the PR.
+
+## Resource Metrics Collection
+
+The `collect_metrics.py` script queries Prometheus to capture resource utilization during load tests.
+
+### Usage
+
+```bash
+python collect_metrics.py \
+  --prometheus-url http://localhost:9090 \
+  --namespaces "foo,bar,ingress-nginx" \
+  --hosts "foo.localhost,bar.localhost" \
+  --duration 5 \
+  --output-dir results
+```
+
+### Options
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `--prometheus-url` | Prometheus server URL | http://localhost:9090 |
+| `--namespaces` | Comma-separated namespaces to monitor | foo,bar,ingress-nginx |
+| `--hosts` | Comma-separated ingress hosts | foo.localhost,bar.localhost |
+| `--duration` | Minutes for rate calculations | 5 |
+| `--output-dir` | Output directory | results |
+| `--output-format` | Output format: json, markdown, or both | both |
+
+### Collected Metrics
+
+**Pod Metrics:**
+- CPU usage (millicores)
+- Memory usage (MB)
+- Network RX/TX (KB/s)
+
+**Ingress Metrics:**
+- Total requests per host
+- Requests per second
+- Response time percentiles (p50, p95, p99)
+
+### Output
+
+- `resource_metrics.json` - Full JSON metrics from Prometheus
+- `resource_metrics.md` - Markdown table (combined with load test results in CI)
+
+### Prerequisites
+
+- Prometheus must be deployed and accessible
+- ServiceMonitor for ingress-nginx must be applied (see `/monitoring/ingress-servicemonitor.yaml`)

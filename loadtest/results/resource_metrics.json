@@ -1,0 +1,88 @@
+{
+  "namespaces": [
+    "ingress-nginx",
+    "default"
+  ],
+  "collection_time": "2026-01-22T13:06:16.637483",
+  "duration_minutes": 5,
+  "cpu": {
+    "default": {
+      "http-echo-bar-567ff47c48-d77fm": {
+        "usage_cores": 0.009,
+        "usage_millicores": 8.96
+      },
+      "http-echo-foo-6ffcbb6445-277fv": {
+        "usage_cores": 0.0096,
+        "usage_millicores": 9.56
+      }
+    },
+    "ingress-nginx": {
+      "ingress-nginx-controller-5cbbcf6489-8qxkq": {
+        "usage_cores": 0.0406,
+        "usage_millicores": 40.59
+      }
+    }
+  },
+  "memory": {
+    "default": {
+      "http-echo-bar-567ff47c48-d77fm": {
+        "usage_bytes": 15101952.0,
+        "usage_mb": 14.4
+      },
+      "http-echo-foo-6ffcbb6445-277fv": {
+        "usage_bytes": 14131200.0,
+        "usage_mb": 13.48
+      }
+    },
+    "ingress-nginx": {
+      "ingress-nginx-controller-5cbbcf6489-8qxkq": {
+        "usage_bytes": 182128640.0,
+        "usage_mb": 173.69
+      }
+    }
+  },
+  "network": {
+    "default": {
+      "http-echo-bar-567ff47c48-d77fm": {
+        "rx_bytes_per_sec": 9901.74,
+        "rx_kb_per_sec": 9.67,
+        "tx_bytes_per_sec": 4822.14,
+        "tx_kb_per_sec": 4.71
+      },
+      "http-echo-foo-6ffcbb6445-277fv": {
+        "rx_bytes_per_sec": 10029.65,
+        "rx_kb_per_sec": 9.79,
+        "tx_bytes_per_sec": 4882.41,
+        "tx_kb_per_sec": 4.77
+      }
+    },
+    "ingress-nginx": {
+      "ingress-nginx-controller-5cbbcf6489-8qxkq": {
+        "rx_bytes_per_sec": 22019.37,
+        "rx_kb_per_sec": 21.5,
+        "tx_bytes_per_sec": 31930.31,
+        "tx_kb_per_sec": 31.18
+      }
+    }
+  },
+  "hosts": [
+    "foo.localhost",
+    "bar.localhost"
+  ],
+  "ingress": {
+    "bar.localhost": {
+      "total_requests": 11612,
+      "requests_per_sec": 20.32,
+      "p50_latency_ms": 2.5,
+      "p95_latency_ms": 4.76,
+      "p99_latency_ms": 4.96
+    },
+    "foo.localhost": {
+      "total_requests": 11780,
+      "requests_per_sec": 20.74,
+      "p50_latency_ms": 2.5,
+      "p95_latency_ms": 4.76,
+      "p99_latency_ms": 4.96
+    }
+  }
+}
