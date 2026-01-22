@@ -29,6 +29,9 @@ kubectl wait --namespace monitoring \
   --selector=app.kubernetes.io/name=prometheus \
   --timeout=120s
 
+echo "==> Installing Ingress Service for monitoring stack..."
+kubectl apply -f ingress-service.yaml
+
 echo ""
 echo "==> kube-prometheus-stack installed successfully!"
 echo ""
@@ -44,3 +47,4 @@ echo ""
 echo "Or use port-forward:"
 echo "  kubectl port-forward -n monitoring svc/kube-prometheus-stack-grafana 3000:80"
 echo "  kubectl port-forward -n monitoring svc/kube-prometheus-stack-prometheus 9090:9090"
+echo "  kubectl port-forward -n monitoring svc/kube-prometheus-stack-alertmanager 9093:9093"
