@@ -177,7 +177,7 @@ jobs:
           # Duration = load test duration (in minutes) + 2 extra minutes
           METRICS_DURATION=$(( (${{ env.LOAD_TEST_DURATION }} / 60) + 2 ))
           python collect_metrics.py \
-            --prometheus-url http://prometheus.localhost \
+            --prometheus-url http://localhost:9090 \
             --urls urls.json \
             --duration $METRICS_DURATION \
             --output-dir results \
